@@ -4,19 +4,29 @@ load_dotenv()  # take environment variables from .env.
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import csv
 
-print('Running from main!')
+artists_list = [
+    'spotify:artist:2WX2uTcsvV5OnS0inACecP',
+]
 
+csv_info = ['Artist,Album,SpotifyUrl,TrackName,TrackDuration(sec),TrackPopularity']
 
-birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-results = spotify.artist_albums(birdy_uri, album_type='album')
-albums = results['items']
-while results['next']:
-    results = spotify.next(results)
-    albums.extend(results['items'])
+for artist in artists_list:
+    results = spotify.artist_top_tracks(artist)
 
-for album in albums:
-    print(album['name'])
+    tracks = results['tracks']
+    for track in tracks:
+        artist_name = track['album']['artists'][0]['name']
+        album_name = track['album']['name']
+        spotify_url = track['external_urls']['spotify']
+        track_name = track['name']
+        track_duration_s = track['duration_ms'] / 1000
+        track_popularity = track['popularity']
 
+        csv_info.append(f'{artist_name},{album_name},{spotify_url},{track_name},{track_duration_s},{track_popularity}')
+
+with open('results.csv','w') as f:
+    f.write('\n'.join(csv_info))
