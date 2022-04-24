@@ -1,7 +1,3 @@
-# We need pyenv and virtualenv to manage the python version
-brew list pyenv || brew install pyenv
-brew list pyenv-virtualenv || brew install pyenv-virtualenv
-
 # Create a new virtualenv with 3.10.3
 pyenv install 3.10.3 -s
 pyenv virtualenv 3.10.3 SpotifyApi
