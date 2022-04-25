@@ -19,7 +19,7 @@ for artist in artists_list:
 
     tracks = results['tracks']
     for track in tracks:
-        artist_name = track['album']['artists'][0]['name']
+        artist_name = ' | '.join(map(lambda a : a['name'], track['artists']))
         album_name = track['album']['name']
         spotify_url = track['external_urls']['spotify']
         track_name = track['name']
